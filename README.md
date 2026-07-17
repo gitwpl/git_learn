@@ -2,6 +2,80 @@
 
 本仓库使用 **仅作用于当前目录** 的 Git 本地配置（`--local`），不会修改全局 `~/.gitconfig`。
 
+## 前置操作
+
+在执行 `git config --local` 之前，按顺序完成以下步骤。
+
+### 1. 确认 Git 已安装
+
+```powershell
+git --version
+```
+
+未安装时从 [git-scm.com](https://git-scm.com/download/win) 下载 Windows 版。
+
+### 2. 初始化或克隆仓库
+
+`--local` 配置只能写在 **已有 `.git` 目录的仓库** 里，需先二选一：
+
+**新建本地仓库：**
+
+```powershell
+cd F:\knowledge\git
+git init
+```
+
+**加入已有远程项目：**
+
+```powershell
+git clone https://github.com/gitwpl/git_learn.git
+cd git_learn
+```
+
+### 3. 在 GitHub 创建远程仓库（新建项目时）
+
+若远程还没有对应仓库：
+
+1. 登录 [GitHub](https://github.com)，新建空仓库（如 `git_learn`）
+2. 复制 HTTPS 地址，供后续 `remote.origin.url` 使用
+
+### 4. 启动代理并确认端口（访问 GitHub 时）
+
+本机访问 GitHub 通常需要代理。在配置 Git **之前** 先确认代理可用：
+
+```powershell
+# 确认代理端口在监听（本机混合端口为 7897）
+Test-NetConnection 127.0.0.1 -Port 7897
+```
+
+`TcpTestSucceeded : True` 表示代理已就绪；若为 `False`，先打开 Clash 等工具并确认 **HTTP/混合代理端口**（常见 7890、7897）。
+
+可同时检查全局 Git 代理是否与当前代理端口一致：
+
+```powershell
+git config --global --get-regexp "proxy|github"
+```
+
+若全局将 GitHub 指向未监听的端口（如 `7890`），后续需在本仓库用 `--local` 覆盖（见下文）。
+
+### 5. 可选：测试与 GitHub 的连通性
+
+配置前可先探测远程是否可达：
+
+```powershell
+git ls-remote https://github.com/gitwpl/git_learn.git HEAD
+```
+
+- 报 `Failed to connect to 127.0.0.1` → 代理未开或端口不对  
+- 报 `SSL/TLS connection failed` → 代理已通，需配置本仓库代理与 SSL（见下文）  
+- 正常列出 commit hash → 网络就绪，可直接配置并 push
+
+### 6. 再执行本地配置
+
+完成以上步骤后，进入项目目录，执行下一节的 `git config --local` 命令。
+
+---
+
 ## 已执行的配置命令
 
 在 `F:\knowledge\git` 目录下执行：
