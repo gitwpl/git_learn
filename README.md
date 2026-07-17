@@ -38,6 +38,26 @@ git config --local http.sslVerify false
 
 > 配置存在 `.git/config`，不会随 commit 提交；换机器后按上文重新执行。
 
+## 分支操作
+
+```powershell
+git checkout -b feature/1      # 创建并切换到新分支
+git branch                     # 查看本地分支（* 为当前分支）
+git checkout master            # 切回 master
+git checkout feature/1         # 切到指定分支
+
+git add .
+git commit -m "说明"
+git push -u origin feature/1   # 新分支首次推送（-u 关联远程）
+git push                       # 之后直接 push
+```
+
+| 报错 | 处理 |
+|------|------|
+| `has no upstream branch` | 首次推送用 `git push -u origin 分支名` |
+
+合并回 master：`git checkout master` → `git pull` → `git merge feature/1` → `git push`
+
 ## 常用命令
 
 ```powershell
